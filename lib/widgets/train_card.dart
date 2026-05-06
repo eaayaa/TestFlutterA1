@@ -14,16 +14,23 @@ class TrainCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 16),
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: BorderSide(color: Colors.grey.withOpacity(0.1)),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: Colors.grey[100]!),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.orange.withOpacity(0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(28),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -119,7 +126,7 @@ class TrainCard extends StatelessWidget {
               const Divider(height: 32),
               Row(
                 children: [
-                  const Icon(Icons. Airline_seat_recline_normal_rounded, size: 16, color: Colors.grey),
+                  const Icon(Icons.airline_seat_recline_normal_rounded, size: 16, color: Colors.grey),
                   const SizedBox(width: 8),
                   Text(
                     'Available: ${train.classes.join(', ')}',

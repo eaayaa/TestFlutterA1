@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import '../utils/dummy_data.dart';
 import 'train_list_screen.dart';
 
@@ -21,6 +22,18 @@ class _HomeScreenState extends State<HomeScreen> {
       initialDate: travelDate,
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 90)),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Colors.orange,
+              onPrimary: Colors.white,
+              onSurface: Colors.black87,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null && picked != travelDate) {
       setState(() {
@@ -40,169 +53,195 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 180,
+            expandedHeight: 220,
             floating: false,
             pinned: true,
+            backgroundColor: Colors.white,
+            elevation: 0,
             flexibleSpace: FlexibleSpaceBar(
-              title: const Text(
-                'Where to go?',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Theme.of(context).colorScheme.primary,
-                      Theme.of(context).colorScheme.primary.withOpacity(0.8),
-                    ],
+              background: Stack(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Colors.orange, Color(0xFFFF8C00)],
+                      ),
+                    ),
                   ),
-                ),
+                  Positioned(
+                    right: -30,
+                    top: 20,
+                    child: Opacity(
+                      opacity: 0.2,
+                      child: Lottie.network(
+                        'https://assets9.lottiefiles.com/packages/lf20_5njp3vgg.json',
+                        width: 250,
+                      ),
+                    ),
+                  ),
+                  const Positioned(
+                    left: 24,
+                    bottom: 80,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hello, Explorer!',
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          'Where to go?',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Search Card
                   Transform.translate(
-                    offset: const Offset(0, -50),
-                    child: Card(
-                      elevation: 8,
-                      shadowColor: Colors.black.withOpacity(0.1),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          children: [
-                            _buildCityInput(
-                              label: 'From',
-                              city: departureCity,
-                              icon: Icons.location_on_outlined,
-                              onTap: () {
-                                // City selection logic
-                              },
-                            ),
-                            Stack(
-                              alignment: Alignment.center,
+                    offset: const Offset(0, -40),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(28),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.orange.withOpacity(0.15),
+                            blurRadius: 30,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        children: [
+                          _buildLocationField(
+                            label: 'Departure',
+                            city: departureCity,
+                            icon: Icons.location_on_rounded,
+                            onTap: () {},
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: Row(
                               children: [
-                                const Divider(height: 32),
+                                Expanded(child: Divider(color: Colors.grey[200])),
+                                const SizedBox(width: 16),
                                 InkWell(
                                   onTap: _swapCities,
                                   child: Container(
-                                    padding: const EdgeInsets.all(8),
+                                    padding: const EdgeInsets.all(10),
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color: Colors.orange.withOpacity(0.1),
                                       shape: BoxShape.circle,
                                     ),
-                                    child: const Icon(
-                                      Icons.swap_vert,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
+                                    child: const Icon(Icons.swap_vert_rounded, color: Colors.orange, size: 24),
                                   ),
                                 ),
+                                const SizedBox(width: 16),
+                                Expanded(child: Divider(color: Colors.grey[200])),
                               ],
                             ),
-                            _buildCityInput(
-                              label: 'To',
-                              city: destinationCity,
-                              icon: Icons.train_outlined,
-                              onTap: () {
-                                // City selection logic
-                              },
-                            ),
-                            const SizedBox(height: 20),
-                            InkWell(
-                              onTap: () => _selectDate(context),
-                              child: Container(
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.surface,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: Colors.grey.withOpacity(0.2)),
-                                ),
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.calendar_today_outlined, size: 20),
-                                    const SizedBox(width: 12),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Travel Date',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey[600],
-                                          ),
-                                        ),
-                                        Text(
-                                          DateFormat('EEE, d MMM yyyy').format(travelDate),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                          ),
+                          _buildLocationField(
+                            label: 'Destination',
+                            city: destinationCity,
+                            icon: Icons.train_rounded,
+                            onTap: () {},
+                          ),
+                          const SizedBox(height: 24),
+                          InkWell(
+                            onTap: () => _selectDate(context),
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[50],
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: Colors.grey[200]!),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.calendar_today_rounded, color: Colors.orange, size: 20),
+                                  const SizedBox(width: 16),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Travel Date', style: TextStyle(color: Colors.grey[500], fontSize: 12)),
+                                      Text(
+                                        DateFormat('EEE, d MMM yyyy').format(travelDate),
+                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(height: 24),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => TrainListScreen(
-                                      from: departureCity,
-                                      to: destinationCity,
-                                      date: travelDate,
-                                    ),
+                          ),
+                          const SizedBox(height: 24),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TrainListScreen(
+                                    from: departureCity,
+                                    to: destinationCity,
+                                    date: travelDate,
                                   ),
-                                );
-                              },
-                              child: const Text('Search Trains'),
-                            ),
-                          ],
-                        ),
+                                ),
+                              );
+                            },
+                            child: const Text('Search Trains', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-
                   const Text(
                     'Popular Routes',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
                   SizedBox(
-                    height: 160,
+                    height: 180,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: DummyData.popularRoutes.length,
-                      separatorBuilder: (context, index) => const SizedBox(width: 16),
+                      separatorBuilder: (context, index) => const SizedBox(width: 20),
                       itemBuilder: (context, index) {
                         final route = DummyData.popularRoutes[index];
                         final cities = route.split(' to ');
                         return Container(
-                          width: 200,
-                          padding: const EdgeInsets.all(16),
+                          width: 220,
+                          padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(color: Colors.grey[100]!),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
+                                color: Colors.black.withOpacity(0.02),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),
@@ -210,30 +249,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Icon(Icons.stars, color: Colors.amber),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    cities[0],
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  const Icon(Icons.arrow_downward, size: 14, color: Colors.grey),
-                                  Text(
-                                    cities[1],
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                'Starting from \$45',
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Colors.orange.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
+                                child: const Icon(Icons.trending_up_rounded, color: Colors.orange, size: 20),
+                              ),
+                              const Spacer(),
+                              Text(cities[0], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                              const Icon(Icons.arrow_right_alt_rounded, color: Colors.orange, size: 18),
+                              Text(cities[1], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Starting at \$45',
+                                style: TextStyle(color: Colors.grey[600], fontSize: 12),
                               ),
                             ],
                           ),
@@ -241,7 +273,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 40),
                 ],
               ),
             ),
@@ -251,7 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildCityInput({
+  Widget _buildLocationField({
     required String label,
     required String city,
     required IconData icon,
@@ -261,25 +293,20 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: onTap,
       child: Row(
         children: [
-          Icon(icon, color: Theme.of(context).colorScheme.primary),
-          const SizedBox(width: 16),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.grey[50],
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: Colors.orange, size: 22),
+          ),
+          const SizedBox(width: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
-                ),
-              ),
-              Text(
-                city,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              Text(label, style: TextStyle(color: Colors.grey[500], fontSize: 12)),
+              Text(city, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
             ],
           ),
         ],

@@ -24,6 +24,7 @@ class _TrainDetailsScreenState extends State<TrainDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(

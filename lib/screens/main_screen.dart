@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
+import 'tickets_screen.dart';
+import 'inbox_screen.dart';
+import 'profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -13,17 +16,20 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _screens = [
     const HomeScreen(),
-    const Center(child: Text('My Bookings')),
-    const Center(child: Text('Notifications')),
-    const Center(child: Text('Profile')),
+    const TicketsScreen(),
+    const InboxScreen(),
+    const ProfileScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _screens,
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        child: _screens[_selectedIndex],
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -42,25 +48,26 @@ class _MainScreenState extends State<MainScreen> {
               _selectedIndex = index;
             });
           },
+          indicatorColor: Colors.orange.withOpacity(0.1),
           destinations: const [
             NavigationDestination(
               icon: Icon(Icons.home_outlined),
-              selectedIcon: Icon(Icons.home_rounded),
+              selectedIcon: Icon(Icons.home_rounded, color: Colors.orange),
               label: 'Home',
             ),
             NavigationDestination(
               icon: Icon(Icons.confirmation_number_outlined),
-              selectedIcon: Icon(Icons.confirmation_number_rounded),
+              selectedIcon: Icon(Icons.confirmation_number_rounded, color: Colors.orange),
               label: 'Tickets',
             ),
             NavigationDestination(
               icon: Icon(Icons.notifications_outlined),
-              selectedIcon: Icon(Icons.notifications_rounded),
+              selectedIcon: Icon(Icons.notifications_rounded, color: Colors.orange),
               label: 'Inbox',
             ),
             NavigationDestination(
               icon: Icon(Icons.person_outline),
-              selectedIcon: Icon(Icons.person_rounded),
+              selectedIcon: Icon(Icons.person_rounded, color: Colors.orange),
               label: 'Profile',
             ),
           ],

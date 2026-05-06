@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import '../models/train_model.dart';
 
 class BookingScreen extends StatefulWidget {
@@ -227,7 +228,13 @@ class _BookingScreenState extends State<BookingScreen> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.check_circle_rounded, color: Colors.green, size: 80),
+            SizedBox(
+              height: 150,
+              child: Lottie.network(
+                'https://assets5.lottiefiles.com/packages/lf20_afmre9iz.json',
+                repeat: false,
+              ),
+            ),
             const SizedBox(height: 24),
             const Text(
               'Booking Successful!',
