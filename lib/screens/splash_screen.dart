@@ -53,8 +53,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 width: 250,
                 height: 250,
                 child: Lottie.network(
-                  'https://lottie.host/808b8b8f-395d-4f01-9252-4467000e3181/e59O9Z5P9H.json', // Train animation
+                  'https://assets2.lottiefiles.com/packages/lf20_m6cu9kcx.json',
                   fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(Icons.train_rounded, size: 100, color: Color(0xFFFF8C00));
+                  },
                 ),
               ),
               const SizedBox(height: 20),

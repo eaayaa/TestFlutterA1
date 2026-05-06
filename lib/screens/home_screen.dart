@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Opacity(
               opacity: 0.3,
               child: Lottie.network(
-                'https://assets3.lottiefiles.com/packages/lf20_t9gkkhz4.json',
+                'https://assets9.lottiefiles.com/packages/lf20_5njp3vgg.json',
                 width: 280,
                 errorBuilder: (context, error, stackTrace) => const Icon(Icons.map_rounded, size: 200, color: Colors.white24),
               ),
